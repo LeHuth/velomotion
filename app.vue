@@ -69,13 +69,22 @@ const computedRows = computed(()=>{
 })
 const currentTrafficLight = ref(0)
 const start = new Date();
-const logTimestamp = (value:string) => {
+const logTimestamp = async (value:string) => {
   data.value.log.push({
     timestamp:Date.now(),
     value:value,
     trafficLightId:currentTrafficLight.value
   });
+  await useFetch('/api/logentry/create',{
+    body:{
+      timestamp:Date.now(),
+      value:value,
+      trafficLightId:currentTrafficLight.value
+    },
+    method:'post'
+  })
   toast.add({ title: `Logged ${value} light` })
+
 };
 
 
